@@ -1,10 +1,11 @@
 using lab2.Models;
+using System.Collections.ObjectModel;
 
 namespace lab2.Pages;
 
 public class CreatePage : ContentPage
 {
-    private List<Product> _productList;
+    private ObservableCollection<Product> _productList;
     private Label _label = new Label() { FontSize = 22 };
     private Entry _nameEntry;
     private Entry _priceEntry;
@@ -13,7 +14,7 @@ public class CreatePage : ContentPage
     private Entry _quantityEntry;
     private DatePicker _datePicker;
 
-    public CreatePage(List<Product> productList)
+    public CreatePage(ObservableCollection<Product> productList)
     {
         _productList = productList;
         _label.Text = "Добавление продукта";

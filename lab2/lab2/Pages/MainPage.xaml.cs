@@ -1,19 +1,20 @@
 ﻿using lab2.Models;
 using lab2.Pages;
-using Microsoft.Maui.Controls;
+using System.Collections.ObjectModel;
 
 namespace lab2;
 
 public partial class MainPage : ContentPage
 {
-	public List<Product> Products = new();
+	public ObservableCollection<Product> Products = new();
     private Label _selectedItemHeader = new Label { FontSize = 18 };
     private ListView _productsListView;
     private Button _editProductButton;
     private Button _addProductButton;
+    private Button _deleteProductButton;
     public MainPage()
 	{
-		Products = new List<Product>()
+		Products = new ObservableCollection<Product>()
 		{
 			new Product(1, "Apple", "kdjkj321234", "AppleProducer", 5.99, new DateTime(2024, 3, 23), 25),
 			new Product(1, "Milk", "ab39803z", "MilkProducer", 12.59, new DateTime(2023, 11, 15), 30),
@@ -30,9 +31,6 @@ public partial class MainPage : ContentPage
             Label nameLabel = new Label { FontSize = 16 };
             nameLabel.SetBinding(Label.TextProperty, "Name");
 
-            Label ageLabel = new Label { FontSize = 14 };
-            ageLabel.SetBinding(Label.TextProperty, "Price");
-
             // создаем объект ViewCell.
             return new ViewCell
             {
@@ -40,7 +38,7 @@ public partial class MainPage : ContentPage
                 {
                     Padding = new Thickness(0, 5),
                     Orientation = StackOrientation.Vertical,
-                    Children = { nameLabel, ageLabel }
+                    Children = { nameLabel }
                 }
             };
         });
@@ -67,9 +65,21 @@ public partial class MainPage : ContentPage
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.Start
         };
+
+        _deleteProductButton = new Button
+        {
+            Text = "Удалить",
+            FontSize = 16,
+            BorderWidth = 1,
+            BackgroundColor = Colors.Purple,
+            TextColor = Colors.White,
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Start
+        };
+        _deleteProductButton.Clicked += DeleteProduct;
         _addProductButton.Clicked += ToAddPage;
         _productsListView.ItemSelected += ProductsListView_ItemSelected;
-        Content = new StackLayout { Children = { _selectedItemHeader, _editProductButton, _productsListView, _addProductButton }, Padding = 7 };
+        Content = new StackLayout { Children = { _selectedItemHeader, _editProductButton, _productsListView, _addProductButton, _deleteProductButton }, Padding = 7 };
 
 	}
 
@@ -80,6 +90,12 @@ public partial class MainPage : ContentPage
         if (selectedProduct != null)
             _selectedItemHeader.Text = selectedProduct.ToString();
     }
+    private void DeleteProduct(object sender, EventArgs e)
+    {
+        Product product = _productsListView.SelectedItem as Product;
+        Products.Remove(product);
+    }
+
 
     private async void ToEditPage(object? sender, EventArgs e)
     {

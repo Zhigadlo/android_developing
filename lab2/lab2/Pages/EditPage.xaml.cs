@@ -43,10 +43,10 @@ public partial class EditPage : ContentPage
 
         _nameEntry = new Entry()
         {
-            Placeholder = "¬ведите название",
             FontSize = 22,
             MaxLength = 20,
-            Text = _productForEdit.Name
+            Text = _productForEdit.Name,
+            IsEnabled = false
         };
 
         _producerEntry = new Entry()
